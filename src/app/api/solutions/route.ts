@@ -5,7 +5,17 @@ import { db } from '@/lib/db';
 const solutions = new Map<string, string>();
 
 export async function GET() {
-  return NextResponse.json(Object.fromEntries(solutions));
+  try {
+    const solutions = await db.solution.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+    return NextResponse.json({ solutions });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to fetch solutions' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req: Request) {
@@ -28,15 +38,25 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const { contestId } = await request.json();
-  
-  if (!contestId) {
+  try {
+    const { id } = await request.json();
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Solution ID is required' },
+        { status: 400 }
+      );
+    }
+
+    await db.solution.delete({
+      where: { id: parseInt(id) }
+    });
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
     return NextResponse.json(
-      { error: 'Contest ID is required' },
-      { status: 400 }
+      { error: 'Failed to delete solution' },
+      { status: 500 }
     );
   }
-
-  solutions.delete(contestId);
-  return NextResponse.json({ success: true });
 }
