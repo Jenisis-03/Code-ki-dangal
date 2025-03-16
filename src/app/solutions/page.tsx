@@ -89,13 +89,18 @@ export default function SolutionForm() {
           />
         </div>
 
+        {error && (
+          <div className="text-red-500 text-sm">{error}</div>
+        )}
+
+        {success && (
+          <div className="text-green-500 text-sm">{success}</div>
+        )}
+
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? 'Adding...' : 'Add Solution'}
         </Button>
       </form>
-
-      {error && <p className="text-red-500 mt-4">{error}</p>}
-      {success && <p className="text-green-500 mt-4">{success}</p>}
     </div>
   );
 } 
