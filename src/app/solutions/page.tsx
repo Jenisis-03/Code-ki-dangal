@@ -12,16 +12,36 @@ export default function SolutionForm() {
     contestName: '',
     link: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await fetch('/api/solutions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
-    alert('Solution link added!');
-    setForm({ platform: '', contestName: '', link: '' });
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const response = await fetch('/api/solutions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to add solution');
+      }
+
+      setSuccess('Solution link added successfully!');
+      setForm({ platform: '', contestName: '', link: '' });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add solution');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -69,10 +89,13 @@ export default function SolutionForm() {
           />
         </div>
 
-        <Button type="submit" className="w-full">
-          Add Solution
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? 'Adding...' : 'Add Solution'}
         </Button>
       </form>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {success && <p className="text-green-500 mt-4">{success}</p>}
     </div>
   );
 } 

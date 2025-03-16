@@ -21,6 +21,16 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    
+    // Validate YouTube URL
+    const youtubeRegex = /^https?:\/\/(www\.)?youtube\.com\/(watch\?v=|playlist\?list=)[\w-]+/;
+    if (!youtubeRegex.test(body.link)) {
+      return NextResponse.json(
+        { error: 'Invalid YouTube URL format' },
+        { status: 400 }
+      );
+    }
+
     await db.solution.create({
       data: {
         platform: body.platform,
@@ -37,9 +47,9 @@ export async function POST(req: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(req: Request) {
   try {
-    const { id } = await request.json();
+    const { id } = await req.json();
     
     if (!id) {
       return NextResponse.json(

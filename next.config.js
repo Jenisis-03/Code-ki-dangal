@@ -14,6 +14,8 @@ const nextConfig = {
       },
     ];
   },
+  // Add Vercel specific configurations
+  output: 'standalone',
 };
 
 module.exports = nextConfig;
