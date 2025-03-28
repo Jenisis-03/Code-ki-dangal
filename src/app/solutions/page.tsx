@@ -35,7 +35,7 @@ export default function SolutionForm() {
         throw new Error(data.error || 'Failed to add solution');
       }
 
-      setSuccess('Solution link added successfully!');
+      setSuccess('Solution added successfully!');
       setForm({ platform: '', contestName: '', link: '' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add solution');
@@ -78,7 +78,7 @@ export default function SolutionForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="link">YouTube Solution Link</Label>
+          <Label htmlFor="link">Solution Link</Label>
           <Input
             id="link"
             type="url"

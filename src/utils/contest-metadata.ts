@@ -1,4 +1,4 @@
-import { Contest } from "@/types/contest";
+import { Contest, Platform } from "@/types/contest";
 
 export function determineCodeforcesContestDifficulty(contestName: string): Contest['difficulty'] {
   const name = contestName.toLowerCase();
@@ -9,7 +9,7 @@ export function determineCodeforcesContestDifficulty(contestName: string): Conte
   } else if (name.includes('div. 3') || name.includes('educational')) {
     return 'Easy';
   }
-  return undefined;
+  return 'Medium';
 }
 
 export function determineCodeChefContestDifficulty(contestCode: string): Contest['difficulty'] {
@@ -21,7 +21,7 @@ export function determineCodeChefContestDifficulty(contestCode: string): Contest
   } else if (code.includes('challenge') || code.includes('long')) {
     return 'Hard';
   }
-  return undefined;
+  return 'Medium';
 }
 
 export function determineLeetCodeContestDifficulty(
@@ -35,7 +35,7 @@ export function determineLeetCodeContestDifficulty(
   } else if (difficulty === 'Hard') {
     return 'Hard';
   }
-  return undefined;
+  return 'Medium';
 }
 
 export function calculateContestMetrics(contests: Contest[]) {
@@ -59,29 +59,17 @@ export function calculateContestMetrics(contests: Contest[]) {
   };
 }
 
-export function enrichContestData(
-  contest: Partial<Contest>,
-  platform: Contest['platform']
-): Contest {
-  const baseContest: Contest = {
-    id: contest.id || '',
-    name: contest.name || '',
-    platform,
-    url: contest.url || '',
-    startTime: contest.startTime || '',
-    duration: contest.duration || '',
-    status: contest.status || 'Upcoming',
-  };
-
+export function enrichContestData(contestData: Partial<Contest>, platform: Platform): Contest {
   return {
-    ...baseContest,
-    ...contest,
-    isBookmarked: contest.isBookmarked || false,
-    solutionLink: contest.solutionLink,
-    registrationUrl: contest.registrationUrl,
-    description: contest.description,
-    difficulty: contest.difficulty,
-    participantCount: contest.participantCount,
-    rating: contest.rating
+    id: contestData.id || '',
+    name: contestData.name || '',
+    platform: platform,
+    url: contestData.url || '',
+    startTime: contestData.startTime || new Date().toISOString(),
+    duration: contestData.duration || '',
+    status: contestData.status || 'Upcoming',
+    difficulty: contestData.difficulty || 'Medium',
+    isBookmarked: false,
+    ...contestData
   };
-} 
+}

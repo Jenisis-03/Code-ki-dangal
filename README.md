@@ -1,5 +1,65 @@
 # Code Ki Dangal - Contest Platform
 
+## 🚀 Deployment Guide
+
+### Prerequisites
+- Node.js 20.x or higher
+- PostgreSQL 16.x
+- Docker and Docker Compose (optional, for containerized deployment)
+
+### Environment Setup
+1. Clone the repository
+2. Copy `.env.example` to `.env` and update the variables:
+   ```bash
+   cp .env.example .env
+   ```
+3. Update the database connection string and other environment variables
+
+### Option 1: Standard Deployment
+```bash
+# Install dependencies
+npm ci
+
+# Generate Prisma client
+npx prisma generate
+
+# Run database migrations
+npx prisma migrate deploy
+
+# Build the application
+npm run build
+
+# Start the server
+npm start
+```
+
+### Option 2: Using the Deployment Script
+```bash
+# Make the script executable
+chmod +x deploy.sh
+
+# Run the deployment script
+./deploy.sh
+```
+
+### Option 3: Docker Deployment
+```bash
+# Build and start the containers
+npm run docker:up
+
+# To stop the containers
+npm run docker:down
+```
+
+### Production Optimizations
+This codebase has been optimized for production with:
+- API response caching
+- Database connection pooling
+- Image optimization
+- Static asset caching
+- Retry mechanisms for external APIs
+- Proper error handling
+
 ## 🔄 Application Workflow
 
 ### Contest Tracking System

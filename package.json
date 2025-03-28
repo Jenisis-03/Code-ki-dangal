@@ -7,7 +7,17 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "docker:build": "docker build -t contest-platform .",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "analyze": "ANALYZE=true next build",
+    "deploy": "bash deploy.sh",
+    "test": "jest",
+    "clean": "rm -rf .next node_modules"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
